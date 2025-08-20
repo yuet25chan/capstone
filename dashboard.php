@@ -7,223 +7,42 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-
 $username = $_SESSION['username'];
 $userId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
-
-
+require_once "header.php";
 
 ?>
 
+ <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./">Task Master</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./about.php">About Us</a>
+                        </li>
+                       <li class="nav-item">
+                            <a class="nav-link" href="./contactus.php">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./logout.php">Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-/* Match index.php font */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
-
-body{
-  background:#ffffff;
-  font-family:'Playfair Display', serif;
-}
-
-/* ================= NAVBAR (lavender, like index.php) ================= */
-.navbar{
-  background-color:#d6bedb !important;
-  box-shadow:0 4px 6px rgba(0,0,0,.1);
-  border:none;
-  border-radius:0;
-  margin:0 0 16px 0;  /* no outer gap, small bottom space */
-}
-
-/* keep a small gutter on both sides of the bar */
-.navbar .container,
-.navbar .container-fluid{
-  padding-left:12px !important;
-  padding-right:12px !important;
-}
-
-/* brand + links */
-.navbar .navbar-brand{
-  color:#fff !important;
-  font-weight:bold;
-  font-size:1.5rem;
-  margin-left:0 !important;      /* cancel BS3 negative offset */
-  padding-left:16px !important;  /* <-- inner space before “Task Master” */
-  padding-right:8px;             /* optional symmetry */
-}
-.navbar .nav-link,
-.navbar .navbar-nav>li>a{
-  color:#fff !important;
-  font-weight:bold;
-}
-.navbar .nav-link:hover,
-.navbar .navbar-nav>li>a:hover{
-  opacity:.9;
-  text-decoration:underline;
-}
-
-/* BS3 compatibility for your BS5-ish markup */
-.ms-auto{ margin-left:auto !important; }
-.navbar .navbar-nav{ list-style:none; padding-left:0; margin:7.5px 0; }
-.navbar .navbar-nav.ms-auto{ float:right; }     /* right-align when only one link */
-.navbar-right{ margin-right:0 !important; }
-
-/* optional hamburger visuals if you keep the toggler */
-.navbar .navbar-toggler{ border:0; outline:0; background:transparent; }
-.navbar .navbar-toggler-icon{
-  display:inline-block; width:24px; height:2px; background:#fff; position:relative;
-}
-.navbar .navbar-toggler-icon::before,
-.navbar .navbar-toggler-icon::after{
-  content:""; position:absolute; left:0; right:0; height:2px; background:#fff;
-}
-.navbar .navbar-toggler-icon::before{ top:-6px; }
-.navbar .navbar-toggler-icon::after{ top:6px; }
-
-/* ================= PAGE CARD & TYPO ================= */
-.container .col-md-12{
-  background:#fff;
-  border:1px solid #f0e8f3;
-  border-radius:16px;
-  padding:24px 24px 32px;
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
-  margin-top:24px;
-}
-h1{ font-weight:700; margin:0 0 6px; letter-spacing:.3px; }
-h2{ color:#6c6c6c; font-size:20px; margin:0 0 18px; }
-
-/* Section header & form card (peach) */
-h3{
-  background:#d6bedb;
-  color:#fff;
-  padding:12px 14px;
-  border-radius:10px 10px 0 0;
-  margin:20px 0 0;
-  font-weight:700;
-}
-h3 + form{
-  background:#fff3e6;               /* peach */
-  border:1px solid #f7d9bb;
-  border-top:none;
-  border-radius:0 0 12px 12px;
-  padding:16px;
-  box-shadow:0 5px 15px rgba(0,0,0,.06);
-  margin-bottom:24px;
-}
-
-/* Inputs */
-label{ display:block; font-weight:700; margin:10px 0 6px; }
-.form-control{
-  border-radius:10px;
-  border:1px solid #e5dff0;
-  box-shadow:none;
-  transition:all .2s ease;
-}
-.form-control:focus{
-  border-color:#c4aacd;
-  box-shadow:0 0 0 3px rgba(214,190,219,.25);
-}
-input[type="date"].form-control{ padding:6px 10px; }
-
-/* Buttons */
-.btn{ border-radius:10px; font-weight:700; }
-.btn-primary{ background:#d6bedb; border-color:#c4aacd; }
-.btn-primary:hover, .btn-primary:focus{ background:#c4aacd; border-color:#b799c1; }
-.btn-info{ background:#bfa7c6; border-color:#b79ec0; color:#fff; }
-.btn-info:hover{ background:#ad92b4; border-color:#a689ab; }
-.btn-danger{ background:#f36b6b; border-color:#ef5a5a; }
-.btn-danger:hover{ background:#e25555; border-color:#db4a4a; }
-
-/* Alerts */
-.alert{ border:none; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.05); }
-.alert-success{ background:#e9f7ef; color:#196c3c; }
-.alert-info{ background:#eef3ff; color:#1a3d8f; }
-.alert-danger{ background:#fdeeee; color:#952d2d; }
-
-/* ================= TASKS TABLE AS CARD ================= */
-table.table{
-  position:relative;
-  border-collapse:separate; border-spacing:0;
-  border-radius:12px; overflow:hidden;
-  border:1px solid #eee; background:#fff;
-  box-shadow:0 5px 15px rgba(0,0,0,.06);
-  margin-top:12px;
-}
-/* faux card header */
-table.table::before{
-  content:'My Tasks';
-  display:block;
-  background:#d6bedb; color:#fff;
-  font-weight:700;
-  padding:12px 14px;
-  border-radius:12px 12px 0 0;
-}
-thead th{ background:#f6f1f8; color:#444; border-bottom:none !important; }
-.table-striped>tbody>tr:nth-of-type(odd){ background:#fcfbfd; }
-.table-hover>tbody>tr:hover{ background:#f4eef6; }
-.table>tbody>tr>td{ vertical-align:middle; }
-
-/* Status badge (8th column) */
-.table>tbody>tr>td:nth-child(8){ font-weight:700; }
-.table>tbody>tr>td:nth-child(8):not(:empty){
-  background:#fff; border:1px solid #e9d9ef; color:#6f3e82;
-  padding:.35em .6em; border-radius:999px; display:inline-block;
-}
-
-/* Action buttons spacing */
-.table .btn + .btn{ margin-left:6px; }
-.fa-pencil, .fa-trash-can{ vertical-align:middle; }
-
-
-.navbar .navbar-collapse{
-  display:flex !important;
-  justify-content:flex-end;
-  align-items:center;
-}
-
-
-
-
-
-
-
-</style>
-
-
-
-
-</head>
-<body>
-
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="./">Task Master</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarNav" aria-controls="navbarNav"
-              aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="nav-item">
-            <a class="nav-link active" href="./logout.php">Log Out</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
 
 <div class="container"><div class="row"><div class="col-md-12">
 
-
+<main class="container">
 <h1>Dashboard</h1>
 <h2>Welcome, <?= htmlspecialchars($_SESSION['username']); ?>!</h2>
 
@@ -439,9 +258,10 @@ mysqli_close($conn);
 </table>
 
 </div></div></div>
+<?php
 
-</body>
-</html>
+require_once "footer.php";
+?>
 
 
 
