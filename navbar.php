@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-lg navbar-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="./">Task Master</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,9 +13,18 @@
                             <a class="nav-link" href="./about.php">About Us</a>
                         </li>
                        
+                        <?php if (isset($_SESSION['user_id'])): ?>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="./login.php">Login</a>
+                            <a class="nav-link" href="./logout.php">Log Out</a>
                         </li>
+                        <?php else: ?>
+                     <li class="nav-item">
+                            <a class="nav-link" href="./login.php">Login</a>
+                    </li>
+                     <?php endif; ?>
+                        
+                        
 
                         <li class="nav-item">
                             <a class="nav-link" href="./contactus.php">Contact Us</a>
@@ -24,4 +33,3 @@
                 </div>
             </div>
         </nav>
-        
