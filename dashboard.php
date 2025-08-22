@@ -10,9 +10,12 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username'];
 $userId = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 require_once "header.php";
+require_once "navbar.php";
+
 
 ?>
 
+<!--
  <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="./">Task Master</a>
@@ -42,6 +45,7 @@ require_once "header.php";
 
 <div class="container"><div class="row"><div class="col-md-12">
 
+-->
 <main class="container">
 <h1>Dashboard</h1>
 <h2>Welcome, <?= htmlspecialchars($_SESSION['username']); ?>!</h2>
@@ -273,5 +277,10 @@ mysqli_close($conn);
 
 require_once "footer.php";
 ?>
+
+
+
+
+
 
 
