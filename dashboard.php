@@ -77,17 +77,23 @@ if (isset($_POST['submit']) && $_POST['submit'] === 'edittask') {
 
 <input type="hidden" name="action" value="edit">
 <input type="hidden" name="task_id" value="<?= isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0 ?>">
-
-<label for="title">Task Title:<input type="text" class="form-control" value="<?=$_POST['title']?>" class="form-control" id="title" name="title" required></label>
+<div>
+<label for="title"><input type="text"  class="form-control" id="title" name="title"
+       value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required></label>
 </div>
 
 <div>
-    <label for="description">Description:<input type="text" class="form-control" type="text" class="form-control" value="<?=$_POST['description']?>" class="form-control" id="description" name="description"></label>
+<label for="description"><input type="text"  class="form-control" id="description" name="description"
+       value="<?= htmlspecialchars($_POST['description'] ?? '') ?>"></label>
 </div>
 
 <div>
-   <label for="due_date">Due Date:<input type="date" value="<?=$_POST['due_date']?>" class="form-control" id="due_date" name="due_date" required></label>
-</div>
+
+<label for="date"><input type="date"  class="form-control" id="due_date" name="due_date"
+
+       value="<?= htmlspecialchars($_POST['due_date'] ?? '') ?>" required>
+</label>
+</label>
 
 <div>
 <label for="category">Category<select name="category" id="category" class="form-control" required> <?php $categories = array('Work', 'School', 'Personal', 'Health', 'Fitness', 'Finance', 'Family', 'Shopping', 'Travel', 'Social'); foreach ($categories as $category) { $selected = (isset($_POST['category']) && $_POST['category'] == $category) ? 'selected' : ''; echo '<option value="' . $category . '" ' . $selected . '>' . $category . '</option>'; } ?>
@@ -120,7 +126,8 @@ else {
 
 
 <h3>Add Task</h3>
-<form action="task.php" method="post">
+<form action="/testing/projects/capstone_sql_and_php/task.php" method="post">
+<input type="hidden" name="action" value="add">
 
 <div>
 <label for="title">Task Title<input type="text" class="form-control" value="<?=$_POST['title']?>" class="form-control" id="title" name="title" required>
@@ -172,7 +179,7 @@ foreach ($statuses as $status)
 
 </div>
 
-<button type="submit" class="btn btn-primary" name="action" value="add">Save Task</button>
+<button type="submit" class="btn btn-primary">Save Task</button>
 
 </form>
 <?php
@@ -223,38 +230,33 @@ while($row = mysqli_fetch_assoc($result)) {
     <td><?=$row['priority']?></td>
     <td><?=$row['created_at']?></td>
     <td><?=$row['status']?></td>
-    <td>
-  <!--<form action="deleteguest.php" method="post"> -->
-      <form action="task.php" method="post">
-      <input type="hidden" name="task_id" value="<?=$row['task_id']?>">
-  <!--<button class='btn btn-danger' name="deleteguest">x</button> -->
-    <button class="btn btn-danger" name="submit" value="delete"><i class="fa-solid fa-trash-can"></i></button>
 
-    </form>
+    <td colspan="2">
+ 
+  <form action="dashboard.php" method="post" class="d-inline">
+    <input type="hidden" name="task_id" value="<?= (int)$row['task_id'] ?>">
+    <input type="hidden" name="title" value="<?= htmlspecialchars($row['title'], ENT_QUOTES) ?>">
+    <input type="hidden" name="description" value="<?= htmlspecialchars($row['description'], ENT_QUOTES) ?>">
+    <input type="hidden" name="category" value="<?= htmlspecialchars($row['category'], ENT_QUOTES) ?>">
+    <input type="hidden" name="due_date" value="<?= htmlspecialchars($row['due_date'], ENT_QUOTES) ?>">
+    <input type="hidden" name="created_at" value="<?= htmlspecialchars($row['created_at'], ENT_QUOTES) ?>">
+    <input type="hidden" name="priority" value="<?= htmlspecialchars($row['priority'], ENT_QUOTES) ?>">
+    <input type="hidden" name="status" value="<?= htmlspecialchars($row['status'], ENT_QUOTES) ?>">
+    <button type="submit" class="btn btn-info" name="submit" value="edittask">
+      <i class="fa-solid fa-pencil pencil"></i>
+    </button>
+  </form>
 
-    <form action="dashboard.php" method="post">
-      
-      <input type="hidden" name="task_id" value="<?=$row['task_id']?>">
-      <input type="hidden" name="title" value="<?=$row['title']?>">
-      <input type="hidden" name="description" value="<?=$row['description']?>">
-      <input type="hidden" name="category" value="<?=$row['category']?>">
-      <input type="hidden" name="due_date" value="<?=$row['due_date']?>">
-      <input type="hidden" name="created_at" value="<?=$row['created_at']?>">
-    <input type="hidden" name="priority" value="<?=$row['priority']?>">
-        <input type="hidden" name="status" value="<?=$row['status']?>">
-        
-      <button type="submit" class="btn btn-info" name="submit" value="edittask"><i class="fa-solid fa-pencil pencil"></i></button>
-    </form>
 
-    
-    <form action="task.php" method="post" class="d-inline" onsubmit="return confirm('Delete this task?')">
+  <form action="task.php" method="post" class="d-inline" onsubmit="return confirm('Delete this task?')">
     <input type="hidden" name="action" value="delete">
     <input type="hidden" name="task_id" value="<?= (int)$row['task_id'] ?>">
     <button type="submit" class="btn btn-danger">
       <i class="fa-solid fa-trash-can"></i>
     </button>
   </form>
-  </td>
+</td>
+
  
 
     </tr>
@@ -271,10 +273,5 @@ mysqli_close($conn);
 
 require_once "footer.php";
 ?>
-
-
-
-
-
 
 
