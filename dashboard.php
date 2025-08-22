@@ -245,6 +245,15 @@ while($row = mysqli_fetch_assoc($result)) {
         
       <button type="submit" class="btn btn-info" name="submit" value="edittask"><i class="fa-solid fa-pencil pencil"></i></button>
     </form>
+
+    
+    <form action="task.php" method="post" class="d-inline" onsubmit="return confirm('Delete this task?')">
+    <input type="hidden" name="action" value="delete">
+    <input type="hidden" name="task_id" value="<?= (int)$row['task_id'] ?>">
+    <button type="submit" class="btn btn-danger">
+      <i class="fa-solid fa-trash-can"></i>
+    </button>
+  </form>
   </td>
  
 
