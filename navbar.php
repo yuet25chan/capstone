@@ -13,7 +13,7 @@
                             <a class="nav-link" href="./about.php">About Us</a>
                         </li>
                        
-                        <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php if (isset($_SESSION['username'])): ?>
 
                         <li class="nav-item">
                             <a class="nav-link" href="./logout.php">Log Out</a>
